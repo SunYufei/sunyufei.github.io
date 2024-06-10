@@ -1,19 +1,21 @@
 import{_ as s,c as i,o as a,a3 as n}from"./chunks/framework.Dx4m7yM6.js";const y=JSON.parse('{"title":"AOP 接口调用日志","description":"","frontmatter":{},"headers":[],"relativePath":"spring/aop/logging.md","filePath":"spring/aop/logging.md","lastUpdated":1701928706000}'),t={name:"spring/aop/logging.md"},p=n(`<h1 id="aop-接口调用日志" tabindex="-1">AOP 接口调用日志 <a class="header-anchor" href="#aop-接口调用日志" aria-label="Permalink to &quot;AOP 接口调用日志&quot;">​</a></h1><div class="language-kt vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">kt</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">package</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> ml.sun.common.aspect</span></span>
 <span class="line"></span>
-<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> ml.sun.common.ext.LogExt.logger</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> java.time.Duration</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> java.time.LocalDateTime</span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> org.aspectj.lang.JoinPoint</span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> org.aspectj.lang.ProceedingJoinPoint</span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> org.aspectj.lang.annotation.AfterThrowing</span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> org.aspectj.lang.annotation.Around</span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> org.aspectj.lang.annotation.Aspect</span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> org.aspectj.lang.annotation.Pointcut</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> org.slf4j.LoggerFactory</span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> org.springframework.stereotype.Component</span></span>
-<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> java.time.Duration</span></span>
-<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> java.time.LocalDateTime</span></span>
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">@Aspect</span></span>
 <span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">@Component</span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> LoggingAspect</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> val</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> logger </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> LoggerFactory.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">getLogger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">.javaClass)</span></span>
+<span class="line"></span>
 <span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">    @Pointcut</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span></span>
 <span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">        &quot;within(@org.springframework.stereotype.Repository *)&quot;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> +</span></span>
 <span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">                &quot;|| within(@org.springframework.stereotype.Service *)&quot;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> +</span></span>
@@ -44,4 +46,4 @@ import{_ as s,c as i,o as a,a3 as n}from"./chunks/framework.Dx4m7yM6.js";const y
 <span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">            e.cause,</span></span>
 <span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">            e.message</span></span>
 <span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        )</span></span>
-<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">}</span></span></code></pre></div>`,2),l=[p];function h(k,e,r,E,g,o){return a(),i("div",null,l)}const F=s(t,[["render",h]]);export{y as __pageData,F as default};
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">}</span></span></code></pre></div>`,2),h=[p];function l(k,e,r,E,g,d){return a(),i("div",null,h)}const F=s(t,[["render",l]]);export{y as __pageData,F as default};
